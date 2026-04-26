@@ -1572,7 +1572,7 @@ OUTPUT GUIDELINES:
           // Clear canvas reference
           (canvas as any) = null;
         } catch (err) {
-          console.error(`Failed to capture agent ${role}:`, err);
+          console.warn(`Failed to capture agent ${role}:`, err);
           doc.addPage();
           doc.setFontSize(14);
           doc.setTextColor(255, 0, 0);
