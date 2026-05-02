@@ -1,0 +1,13 @@
+797:export default function App() {
+1208:      const encoder = new TextEncoder();
+1285:     A[Start] -->|"Initialize"| B(Process)
+1527:        await new Promise(resolve => setTimeout(resolve, 100));
+3280:                                    const reasoner = new OVPReasoner();
+4112:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, totalSupply: Number(e.target.value) }))}
+4122:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, initialPrice: Number(e.target.value) }))}
+4133:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, growthRate: Number(e.target.value) }))}
+4148:                                        onChange={(e) => setAnalystConfig(prev => ({ ...prev, burnRate: Number(e.target.value) }))}
+4157:                                        onChange={(e) => setAnalystConfig(prev => ({ ...prev, stakingApr: Number(e.target.value) }))}
+4586:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, volatility: Number(e.target.value) }))}
+4598:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, crashChance: Number(e.target.value) }))}
+4610:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, simulationSpeed: Number(e.target.value) }))}

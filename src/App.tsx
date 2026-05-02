@@ -109,7 +109,8 @@ mermaid.initialize({
   startOnLoad: true,
   theme: 'dark',
   securityLevel: 'loose',
-  fontFamily: 'monospace'
+  fontFamily: 'monospace',
+  htmlLabels: false
 });
 
 const Mermaid = ({ chart }: { chart: string }) => {
@@ -1421,6 +1422,8 @@ OUTPUT GUIDELINES:
         useCORS: true,
         logging: false,
         onclone: (clonedDoc) => {
+          const scripts = clonedDoc.querySelectorAll('script, iframe');
+          scripts.forEach(s => s.remove());
           const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
           styles.forEach(s => s.remove());
           
@@ -1531,6 +1534,8 @@ OUTPUT GUIDELINES:
             useCORS: true,
             logging: false,
             onclone: (clonedDoc) => {
+              const scripts = clonedDoc.querySelectorAll('script, iframe');
+              scripts.forEach(s => s.remove());
               const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
               styles.forEach(s => s.remove());
               const target = clonedDoc.getElementById(`agent-report-${role}`);

@@ -1,0 +1,63 @@
+const Mermaid = ({ chart }: { chart: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (ref.current && chart) {
+      const renderMermaid = async () => {
+--
+const OVPMap = ({ graphData }: { graphData: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      mermaid.render('ovp-graph-svg', graphData).then(({ svg }) => {
+        if (containerRef.current) containerRef.current.innerHTML = svg;
+--
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+  
+--
+  );
+  const [activeDiagnostics, setActiveDiagnostics] = useState<Record<string, DiagnosticResult>>({});
+  const activeDiagnosticsRef = useRef(activeDiagnostics);
+  useEffect(() => { activeDiagnosticsRef.current = activeDiagnostics; }, [activeDiagnostics]);
+
+  const [alerts, setAlerts] = useState<{ id: string, message: string, type: 'warning' | 'error' | 'info', timestamp: Date }[]>([]);
+
+--
+    }
+  };
+
+  useEffect(() => {
+    if (professionalId.verified) {
+      fetchSavedProjects();
+    }
+--
+    }
+  };
+
+  useEffect(() => {
+    const monitor = setInterval(() => {
+      setAgentHealth(prev => {
+        const newHealth = { ...prev };
+--
+    });
+  };
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (stressTestConfig.simulationRunning) {
+      intervalId = setInterval(() => {
+--
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }

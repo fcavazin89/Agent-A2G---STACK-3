@@ -1,0 +1,423 @@
+118:  useEffect(() => {
+123:          ref.current!.removeAttribute('data-processed');
+124:          const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
+150:      renderMermaid();
+161:  const chart = String(children).replace(/\n$/, '');
+786:  useEffect(() => {
+797:export default function App() {
+798:  const { wallet, connect, disconnect } = useWallet();
+830:  const [inputText, setInputText] = useState('');
+831:  const [isTyping, setIsTyping] = useState(false);
+833:  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+835:  useEffect(() => {
+836:    document.documentElement.setAttribute('data-theme', theme);
+839:  const [stressTestConfig, setStressTestConfig] = useState({
+853:  const [analystConfig, setAnalystConfig] = useState({
+860:  const [forgeConfig, setForgeConfig] = useState({
+869:  const [engineIdea, setEngineIdea] = useState('');
+870:  const [engineQ2, setEngineQ2] = useState('');
+873:  const [engineLoading, setEngineLoading] = useState(false);
+874:  const [isSignModalOpen, setIsSignModalOpen] = useState(false);
+879:    Object.fromEntries(AGENTS.map(a => [a.role, { status: a.status, lastSeen: new Date() }]))
+882:  const activeDiagnosticsRef = useRef(activeDiagnostics);
+883:  useEffect(() => { activeDiagnosticsRef.current = activeDiagnostics; }, [activeDiagnostics]);
+888:  const [isSaving, setIsSaving] = useState(false);
+900:  const [professionalId, setProfessionalId] = useState({
+908:  const [password, setPassword] = useState('');
+909:  const [authError, setAuthError] = useState('');
+910:  const [auditHash, setAuditHash] = useState('');
+917:      if (data.success) setSavedProjects(data.projects);
+923:  useEffect(() => {
+925:      fetchSavedProjects();
+931:    const now = new Date();
+932:    setAlerts(a => [{ 
+933:      id: `diag-start-${role}-${now.getTime()}-${Math.random().toString(36).substr(2, 5)}`, 
+940:      const result = await runDiagnostics(role);
+941:      setActiveDiagnostics(prev => ({ ...prev, [role]: result }));
+944:        const recoverNow = new Date();
+945:        setAgentHealth(prev => ({ 
+949:        setAlerts(a => [{ 
+950:          id: `diag-pass-${role}-${recoverNow.getTime()}-${Math.random().toString(36).substr(2, 5)}`, 
+955:        setActiveDiagnostics(prev => {
+962:        setAlerts(a => [{ 
+963:          id: `recon-start-${role}-${new Date().getTime()}-${Math.random().toString(36).substr(2, 5)}`, 
+966:          timestamp: new Date() 
+969:        const recovered = await attemptReconnection(role);
+972:          const recoverNow = new Date();
+973:          setAgentHealth(prev => ({ 
+977:          setAlerts(a => [{ 
+978:            id: `recon-pass-${role}-${recoverNow.getTime()}-${Math.random().toString(36).substr(2, 5)}`, 
+983:          setActiveDiagnostics(prev => {
+989:          setAlerts(a => [{ 
+990:            id: `crit-fail-${role}-${new Date().getTime()}-${Math.random().toString(36).substr(2, 5)}`, 
+993:            timestamp: new Date() 
+995:          setActiveDiagnostics(prev => ({
+1006:  useEffect(() => {
+1007:    const monitor = setInterval(() => {
+1008:      setAgentHealth(prev => {
+1010:        const now = new Date();
+1013:        AGENTS.forEach(agent => {
+1030:              handleAgentDiagnostic(agent.role, agent.name);
+1032:              setAlerts(a => [{ id: `${agent.role}-ok-${now.getTime()}-${Math.random().toString(36).substr(2, 5)}`, message: `RESOLVED: Agent ${agent.name} is back ONLINE.`, type: 'info' as const, timestamp: now }, ...a].slice(0, 5));
+1038:            const offlineSecs = (now.getTime() - current.lastSeen.getTime()) / 1000;
+1042:               setAlerts(a => {
+1044:                 return [{ id: `crit-${agent.role}-${now.getTime()}-${Math.random().toString(36).substr(2, 5)}`, message: criticalMsg, type: 'error' as const, timestamp: now }, ...a].slice(0, 5);
+1054:    return () => clearInterval(monitor);
+1058:    setActiveDiagnostics(prev => {
+1063:    setAgentHealth(prev => ({
+1065:      [role]: { status: 'ONLINE', lastSeen: new Date() }
+1067:    setAlerts(a => [{
+1068:      id: `manual-reset-${role}-${new Date().getTime()}-${Math.random().toString(36).substr(2, 5)}`,
+1071:      timestamp: new Date()
+1077:      setIsSignModalOpen(true);
+1085:    setIsSaving(true);
+1108:      if (contentType && contentType.indexOf("application/json") !== -1) {
+1112:          fetchSavedProjects();
+1125:      setIsSaving(false);
+1135:        setEngineIdea(state.engineIdea || '');
+1136:        setMessages(state.messages || {});
+1137:        setEngineResults(state.engineResults || {});
+1138:        setTasks(state.tasks || []);
+1139:        setSelectedAgents(state.selectedAgents || []);
+1140:        if (state.forgeConfig) setForgeConfig(state.forgeConfig);
+1141:        if (state.analystConfig) setAnalystConfig(state.analystConfig);
+1143:        setView('dashboard');
+1152:    e.stopPropagation();
+1156:      fetchSavedProjects();
+1164:    setAuthError('');
+1180:        setProfessionalId({
+1187:        setIsSignModalOpen(false);
+1188:        setPassword('');
+1189:        setAuthError('');
+1191:        setAuthError(data.error || 'Authentication failed');
+1195:      setAuthError('Network error: Could not reach STACK3 Auth Server');
+1205:        timestamp: new Date().toISOString(),
+1208:      const encoder = new TextEncoder();
+1211:      const hashArray = Array.from(new Uint8Array(hashBuffer));
+1212:      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+1215:    setAuditHash(hashHex);
+1239:      setIsSignModalOpen(true);
+1245:    setEngineLoading(true);
+1246:    setView('engine');
+1249:    selectedAgentRoles.forEach(role => {
+1252:    setEngineResults(initialResults);
+1264:          setPdfStatus(`Siphoning Data: ${role} (${i+1}/${selectedAgentRoles.length})...`);
+1266:          const response = await chatWithAgent(role, `
+1308:          setEngineResults(prev => ({
+1314:          const errorMsg = typeof error === 'object' && error !== null ? JSON.stringify(error).toLowerCase() : String(error).toLowerCase();
+1317:          setEngineResults(prev => ({
+1331:      setEngineLoading(false);
+1335:        const globalMap = await chatWithAgent('ARCHITECT', `Create a central Mermaid mindmap that connects the tasks of: ${summaries}. Focused on the objective: ${engineIdea}. Return ONLY the mermaid code.`);
+1336:        setEngineResults(prev => ({
+1347:    const pageCount = pdfDoc.getNumberOfPages();
+1348:    const pageWidth = pdfDoc.internal.pageSize.getWidth();
+1349:    const pageHeight = pdfDoc.internal.pageSize.getHeight();
+1352:        pdfDoc.setPage(i);
+1355:        pdfDoc.saveGraphicsState();
+1356:        pdfDoc.setGState(new (pdfDoc as any).GState({ opacity: 0.02 }));
+1357:        pdfDoc.setTextColor(0, 209, 255);
+1358:        pdfDoc.setFontSize(120);
+1359:        pdfDoc.setFont("helvetica", "bold");
+1364:        pdfDoc.restoreGraphicsState();
+1367:        pdfDoc.setDrawColor(226, 232, 240);
+1368:        pdfDoc.setLineWidth(0.2);
+1372:        pdfDoc.setFillColor(248, 250, 252);
+1374:        pdfDoc.setDrawColor(0, 209, 255);
+1375:        pdfDoc.setLineWidth(0.8);
+1378:        pdfDoc.setFontSize(8);
+1379:        pdfDoc.setTextColor(71, 85, 105);
+1380:        pdfDoc.setFont("helvetica", "bold");
+1383:        pdfDoc.setTextColor(15, 23, 42);
+1384:        pdfDoc.setFontSize(10);
+1387:        pdfDoc.setFontSize(7);
+1388:        pdfDoc.setTextColor(0, 209, 255);
+1389:        pdfDoc.setFont("helvetica", "normal");
+1393:        pdfDoc.setFontSize(7);
+1394:        pdfDoc.setTextColor(148, 163, 184);
+1395:        pdfDoc.setFont("helvetica", "normal");
+1400:        pdfDoc.setDrawColor(226, 232, 240);
+1401:        pdfDoc.setLineWidth(0.2);
+1407:    const element = document.getElementById(`agent-report-${role}`);
+1410:    setPdfStatus(`Preparing ${role} Intelligence Data...`);
+1412:      const doc = new jsPDF('p', 'mm', 'a4');
+1413:      const pageWidth = doc.internal.pageSize.getWidth();
+1414:      const pageHeight = doc.internal.pageSize.getHeight();
+1424:          const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+1425:          styles.forEach(s => s.remove());
+1427:          const target = clonedDoc.getElementById(`agent-report-${role}`);
+1429:            target.querySelectorAll('*').forEach(el => {
+1430:              const s = el.getAttribute('style');
+1431:              if (s && s.includes('oklch')) el.setAttribute('style', s.replace(/oklch\([^)]+\)/g, '#334155'));
+1435:          const style = clonedDoc.createElement('style');
+1444:          clonedDoc.head.appendChild(style);
+1448:      const imgData = canvas.toDataURL('image/jpeg', 0.9);
+1456:      doc.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight, undefined, 'FAST');
+1460:        doc.addPage();
+1462:        doc.addImage(imgData, 'JPEG', margin, position + margin, imgWidth, imgHeight, undefined, 'FAST');
+1466:      applyPDFBranding(doc);
+1472:      setPdfStatus(null);
+1482:    setPdfStatus('Initializing PDF Engine...');
+1484:      const doc = new jsPDF('p', 'mm', 'a4');
+1485:      const pageWidth = doc.internal.pageSize.getWidth();
+1486:      const pageHeight = doc.internal.pageSize.getHeight();
+1493:      setPdfStatus('Generating Cover Page...');
+1494:      doc.setFillColor(darkBg[0], darkBg[1], darkBg[2]);
+1497:      doc.setFont("helvetica", "bold");
+1498:      doc.setFontSize(36);
+1499:      doc.setTextColor(255, 255, 255);
+1502:      doc.setFontSize(14);
+1503:      doc.setTextColor(brandColor[0], brandColor[1], brandColor[2]);
+1506:      doc.setDrawColor(brandColor[0], brandColor[1], brandColor[2]);
+1507:      doc.setLineWidth(1);
+1510:      doc.setFontSize(10);
+1511:      doc.setTextColor(100, 120, 140);
+1512:      doc.text(`MISSION: ${(engineIdea || 'UNKNOWN').toUpperCase()}`, pageWidth / 2, 125, { align: "center" });
+1513:      doc.text(`DATE: ${new Date().toLocaleDateString()}`, pageWidth / 2, 139, { align: "center" });
+1519:        setPdfStatus(`Siphoning Data: ${role} (${i+1}/${activeRoles.length})...`);
+1521:        const element = document.getElementById(`agent-report-${role}`);
+1525:        await new Promise(resolve => setTimeout(resolve, 100));
+1534:              const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+1535:              styles.forEach(s => s.remove());
+1536:              const target = clonedDoc.getElementById(`agent-report-${role}`);
+1538:                target.querySelectorAll('*').forEach(el => {
+1539:                  const s = el.getAttribute('style');
+1541:                    el.setAttribute('style', s.replace(/oklch\([^)]+\)/g, '#334155'));
+1545:              const style = clonedDoc.createElement('style');
+1551:              clonedDoc.head.appendChild(style);
+1555:          const imgData = canvas.toDataURL('image/jpeg', 0.75); // Lower quality for memory
+1561:          doc.addPage();
+1562:          doc.addImage(imgData, 'JPEG', margin, position, contentWidth, imgHeight, undefined, 'FAST');
+1566:            doc.addPage();
+1568:            doc.addImage(imgData, 'JPEG', margin, position + 25, contentWidth, imgHeight, undefined, 'FAST');
+1576:          doc.addPage();
+1577:          doc.setFontSize(14);
+1578:          doc.setTextColor(255, 0, 0);
+1579:          doc.text(`ERROR CAPTURING ${role.toUpperCase()} REPORT`, margin, 40);
+1580:          doc.setFontSize(10);
+1581:          doc.setTextColor(100, 100, 100);
+1586:      setPdfStatus('Applying Security Branding...');
+1587:      applyPDFBranding(doc);
+1590:      setPdfStatus('Finalizing Audit Seals...');
+1591:      doc.addPage();
+1592:      doc.setFillColor(darkBg[0], darkBg[1], darkBg[2]);
+1595:      doc.setFont("helvetica", "bold");
+1596:      doc.setFontSize(22);
+1597:      doc.setTextColor(255, 255, 255);
+1600:      doc.setDrawColor(brandColor[0], brandColor[1], brandColor[2]);
+1601:      doc.setLineWidth(0.5);
+1608:        { label: "VALIDATION TIMESTAMP", value: new Date().toUTCString() },
+1614:      doc.setFontSize(10);
+1615:      auditLines.forEach(line => {
+1616:        doc.setTextColor(brandColor[0], brandColor[1], brandColor[2]);
+1618:        doc.setTextColor(255, 255, 255);
+1625:      doc.setDrawColor(brandColor[0], brandColor[1], brandColor[2]);
+1629:      doc.setFontSize(12);
+1630:      doc.setTextColor(255, 255, 255);
+1634:      doc.setFontSize(9);
+1635:      doc.setTextColor(148, 163, 184);
+1644:      doc.setFontSize(10);
+1645:      doc.setTextColor(255, 255, 255);
+1648:      doc.setDrawColor(255, 255, 255);
+1650:      doc.setFontSize(7);
+1653:      const finalHash = await generateAuditHash();
+1655:      doc.setFillColor(15, 23, 42);
+1657:      doc.setDrawColor(brandColor[0], brandColor[1], brandColor[2]);
+1660:      doc.setFontSize(9);
+1661:      doc.setTextColor(brandColor[0], brandColor[1], brandColor[2]);
+1664:      doc.setFont("courier", "normal");
+1665:      doc.setTextColor(255, 255, 255);
+1666:      const splitHash = doc.splitTextToSize(finalHash, pageWidth - 60);
+1669:      doc.setFont("helvetica", "italic");
+1670:      doc.setFontSize(8);
+1671:      doc.setTextColor(100, 120, 140);
+1674:      setPdfStatus('Downloading Report...');
+1675:      doc.save(`STACK3_Audit_Recap_${new Date().getTime()}.pdf`);
+1680:      setPdfStatus(null);
+1685:    setStressTestConfig(prev => {
+1713:        const eventDuration = prev.priceData.length - prev.priceData.findIndex(p => p.day === prev.currentDay - 1) || 1;
+1780:  useEffect(() => {
+1783:      intervalId = setInterval(() => {
+1784:        updateStressSimulation();
+1788:      if (intervalId) clearInterval(intervalId);
+1793:    setStressTestConfig(prev => ({
+1803:    setStressTestConfig(prev => {
+1815:          config.volatility = randomizeValue(75, 15);
+1816:          config.marketSentiment = randomizeValue(20, 10);
+1817:          config.crashChance = calculateCrashChance(15, 10);
+1827:          config.volatility = randomizeValue(60, 12);
+1828:          config.marketSentiment = randomizeValue(35, 8);
+1829:          config.crashChance = calculateCrashChance(8, 6);
+1833:          config.volatility = randomizeValue(50, 10);
+1834:          config.marketSentiment = randomizeValue(25, 12);
+1835:          config.crashChance = calculateCrashChance(6, 5);
+1839:          config.volatility = randomizeValue(65, 20);
+1840:          config.marketSentiment = randomizeValue(15, 10);
+1841:          config.crashChance = calculateCrashChance(20, 15);
+1845:          config.volatility = randomizeValue(70, 15);
+1846:          config.marketSentiment = randomizeValue(30, 10);
+1847:          config.crashChance = calculateCrashChance(12, 8);
+1856:    setTimeout(() => {
+1857:      setStressTestConfig(prev => ({ ...prev, simulationRunning: true }));
+1863:  useEffect(() => {
+1869:  const dashboardProjections = useMemo(() => {
+1875:            price: parseFloat(currentPrice.toFixed(4)),
+1889:    if (view === 'dashboard') setView('chat');
+1894:    setInputText('');
+1895:    setIsTyping(true);
+1898:    const userMsgId = Date.now().toString();
+1903:      timestamp: new Date()
+1906:    setMessages(prev => {
+1908:      targets.forEach(role => {
+1916:    if (taskKeywords.some(k => text.toLowerCase().includes(k))) {
+1918:      const detectedPriority = Object.entries(priorityWeights).find(([k]) => text.toLowerCase().includes(k))?.[1] || 'MEDIUM';
+1921:        id: Math.random().toString(36).substring(2, 9),
+1929:        createdAt: new Date()
+1931:      setTasks(prev => [newTask, ...prev]);
+1934:      setTimeout(() => {
+1935:         setTasks(prev => prev.map(t => t.id === newTask.id ? { ...t, progress: 60 } : t));
+1955:          const response = await chatWithAgent(currentRole, enhancedText, history);
+1958:            id: Math.random().toString(),
+1961:            timestamp: new Date(),
+1965:          setMessages(prev => ({
+1971:          setTasks(prev => prev.map(t => 
+1980:            id: Math.random().toString(),
+1983:            timestamp: new Date(),
+1984:            metadata: { error: error instanceof Error ? error.message : String(error) }
+1986:          setMessages(prev => ({
+1990:          setTasks(prev => prev.map(t => 
+1998:      setIsTyping(false);
+2008:          onClick={() => setView('dashboard')}
+2033:                    onClick={() => setIsSettingsOpen(true)}
+2048:                      onClick={() => setIsSignModalOpen(true)}
+2088:              onClick={() => setIsSettingsOpen(false)}
+2103:                  onClick={() => setIsSettingsOpen(false)}
+2115:                      onClick={() => setTheme('dark')}
+2126:                      onClick={() => setTheme('light')}
+2142:                    <span>{new Date().getFullYear()} © NODE_SYSTEM</span>
+2164:                    setSelectedAgents(prev => 
+2180:                    setForgeConfig(prev => ({ ...prev, language: 'Rust' }));
+2182:                  setActiveAgent(agent);
+2186:                    setSelectedAgents(prev => 
+2192:                    setSelectedAgents([agent.role]);
+2195:                  setView('chat');
+2236:            onClick={() => setView('dashboard')}
+2245:            onClick={() => setView('engine')}
+2255:            onClick={() => setView('protocol')}
+2311:                              onClick={() => handleLoadProject(proj.id)}
+2316:                                  onClick={(e) => handleDeleteProject(proj.id, e)}
+2328:                                  <div className="text-[8px] font-mono text-[#7F8C99] uppercase mt-1">{new Date(proj.timestamp).toLocaleDateString()} @ {new Date(proj.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+2351:                            onChange={(e) => setEngineIdea(e.target.value)}
+2360:                            onChange={(e) => setEngineQ2(e.target.value)}
+2378:                                  setSelectedAgentRoles(prev => 
+2439:                            setActiveAgent(AGENTS[0]);
+2440:                            setView('chat');
+2475:                                    [{alert.timestamp.toLocaleTimeString()}] {alert.type}
+2513:                                        [{check.status.toUpperCase()}]
+2531:                                      onClick={() => handleManualRestart(role as AgentRole)}
+2547:                           <span className="text-white">{(Object.values(agentHealth).filter(h => h.status === 'ONLINE').length / AGENTS.length * 100).toFixed(0)}%</span>
+2692:                           setActiveAgent(AGENTS.find(a => a.role === 'ERP') || AGENTS[7]);
+2693:                           setView('chat');
+2713:                            setActiveAgent(erpAgent);
+2714:                            setView('chat');
+2716:                               handleSendMessage(`Initialize Strategic Plan [${snippet.level}]: ${snippet.name}. Context: ${snippet.desc}. Prompt: ${snippet.prompt}`, 'ERP');
+2759:                      onClick={() => setView('dashboard')}
+2846:                                        onClick={() => handleExportAgent(role)}
+2861:                                         <div className="text-xs text-app-text-secondary font-mono">ID: STACK3-{role} | {new Date().toLocaleDateString()}</div>
+2919:                                  <div className="text-[9px] font-mono text-[#444] uppercase tracking-widest">Timestamp: {new Date().toLocaleTimeString()} (UTC)</div>
+2930:                                  onClick={() => professionalId.verified ? generateAuditHash() : setIsSignModalOpen(true)}
+2962:                          onClick={() => setProtocolView(v as any)}
+3084:                                        const res = AccountAbstraction.bridgeExecution(acc, action);
+3103:                                            const newSes = AccountAbstraction.generateSessionKey(['TRANSFER_LIMIT_100']);
+3105:                                            setSmartAccounts(updated);
+3169:                                      id: `VA-${Math.random().toString(36).substring(2, 9)}`.toUpperCase(), 
+3173:                                      ts: new Date().toISOString() 
+3175:                                    setAttestations(prev => [newVa, ...prev]);
+3206:                                        <div className="text-[7px] font-mono text-[#444]">{new Date(va.ts).toLocaleTimeString()}</div>
+3276:                                    const reasoner = new OVPReasoner();
+3277:                                    const res = await reasoner.verifyConsistency({ id: 'test', type: 'UTILITY', properties: {}, parentIds: [], rules: ['STRICT_ISOLATION'] });
+3278:                                    setReasoningResult(res);
+3295:                                    const proof = await OVPCircuit.generateProof({ id: 'sa-01', type: 'UTILITY', properties: {}, parentIds: [], rules: [] }, 'secret-seed');
+3296:                                    setZkpProof(proof);
+3395:                                      onClick={() => setGameScenario({ strategy: 'NASH_STABLE', stability: '92.4%' })}
+3401:                                      onClick={() => setGameScenario({ strategy: 'EQUILIBRIUM_COLLAPSE', stability: '14.2%' })}
+3463:                                onClick={() => setSelectedAgents(prev => prev.filter(r => r !== agent.role))}
+3482:                                    setSelectedAgents(prev => [...prev, agent.role]);
+3510:                            setSelectedAgents(prev => [...prev, 'PM']);
+3545:                                  {Array.from(new Set(FORGE_SNIPPETS[forgeConfig.language as keyof typeof FORGE_SNIPPETS].map(s => s.category))).map(cat => (
+3552:                                            onClick={() => handleSendMessage(`Forge ${forgeConfig.language} snippet: ${snip.name}. ${snip.prompt}`)}
+3576:                                             onClick={() => setForgeConfig(prev => ({ ...prev, language: lang as any }))}
+3595:                                               setForgeConfig(prev => {
+3620:                                               setForgeConfig(prev => ({
+3649:                                                 setForgeConfig(prev => ({
+3678:                                               setForgeConfig(prev => ({
+3764:                                           onClick={() => setForgeConfig(prev => ({ ...prev, step: 'review' }))}
+3842:                                   onClick={() => setForgeConfig(prev => ({ ...prev, step: 'config' }))}
+3850:                                       setForgeConfig(prev => ({ ...prev, step: 'verify' }));
+3852:                                       handleSendMessage(`FORGE_EXECUTION: Build ${forgeConfig.language} ${forgeConfig.type} with features: [${forgeConfig.features.join(', ')}]. Libraries: [${forgeConfig.verificationLibs.join(', ')}]. Deploy target: Base Sepolia.`);
+3853:                                       setForgeConfig(prev => ({ ...prev, step: 'config' }));
+3904:                                      onClick={() => setForgeConfig(prev => ({ ...prev, step: 'review' }))}
+3911:                                        handleSendMessage(`FORGE_VERIFIED_EXECUTION: Build ${forgeConfig.language} ${forgeConfig.type} with features: [${forgeConfig.features.join(', ')}]. Verification Tools: [${forgeConfig.verificationTools.join(', ')}]. Libraries: [${forgeConfig.verificationLibs.join(', ')}]. Deploy target: Base Sepolia.`);
+3912:                                        setForgeConfig(prev => ({ ...prev, step: 'config' }));
+3943:                                    onClick={() => handleSendMessage(`Generate Strategy Document: ${item.name}. Context: ${item.desc}. Details: ${item.prompt}`)}
+4016:                                     onClick={() => handleSendMessage(`Initialize Strategic Plan [${snip.level}]: ${snip.name}. Context: ${snip.desc}. Prompt: ${snip.prompt}`)}
+4108:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, totalSupply: Number(e.target.value) }))}
+4118:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, initialPrice: Number(e.target.value) }))}
+4129:                                      onChange={(e) => setAnalystConfig(prev => ({ ...prev, growthRate: Number(e.target.value) }))}
+4144:                                        onChange={(e) => setAnalystConfig(prev => ({ ...prev, burnRate: Number(e.target.value) }))}
+4153:                                        onChange={(e) => setAnalystConfig(prev => ({ ...prev, stakingApr: Number(e.target.value) }))}
+4191:                                       ${(dashboardProjections[12].marketCap / 1000000).toFixed(2)}M
+4195:                                    onClick={() => handleSendMessage(`Analyze the following tokenomics hypothesis: Total Supply: ${analystConfig.totalSupply}, Initial Price: $${analystConfig.initialPrice}, Target Growth: ${analystConfig.growthRate}%, Burn Rate: ${analystConfig.burnRate}%, Staking APR: ${analystConfig.stakingApr}%. Provide a detailed viability report with ROI and risk assessment.`)}
+4206:                             { label: 'Tokenomics ROI', value: `${(dashboardProjections[12].price / analystConfig.initialPrice).toFixed(1)}x`, sub: 'Projected' },
+4235:                              onClick={() => handleSendMessage(`Initialize Risk Architecture Review: ${item.name}. Scope: ${item.desc}. Parameters: ${item.prompt}`)}
+4290:                              onClick={() => handleSendMessage(`Analyze PoV Utility Flow: ${item.name}. Category: ${item.desc}. Prompt: ${item.prompt}`)}
+4365:                              onClick={() => handleSendMessage(`Execute Ontological Design: ${item.name}. Category: ${item.desc}. Prompt: ${item.prompt}`)}
+4429:                               onClick={() => setStressTestConfig(p => ({ ...p, simulationRunning: !p.simulationRunning }))}
+4449:                                    <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], price: p.priceData[p.priceData.length - 1].price * 0.9 }] }))} className="px-2 py-1 bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 hover:border-red-500 font-bold rounded text-[10px] transition-colors">-10%</button>
+4450:                                    <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], price: p.priceData[p.priceData.length - 1].price * 1.1 }] }))} className="px-2 py-1 bg-green-500/20 hover:bg-green-500 text-green-500 hover:text-white border border-green-500/50 hover:border-green-500 font-bold rounded text-[10px] transition-colors">+10%</button>
+4453:                                <div className="text-2xl font-bold text-white tracking-tighter">${stressTestConfig.priceData[stressTestConfig.priceData.length - 1].price.toFixed(2)}</div>
+4457:                                    <span className="text-green-500 flex items-center"><ArrowUpRight className="w-3 h-3 mr-1" /> +{((stressTestConfig.priceData[stressTestConfig.priceData.length - 1].price / stressTestConfig.priceData[stressTestConfig.priceData.length - 2].price - 1) * 100).toFixed(2)}%</span> :
+4458:                                    <span className="text-rose-500 flex items-center"><ArrowDownRight className="w-3 h-3 mr-1" /> {((stressTestConfig.priceData[stressTestConfig.priceData.length - 1].price / stressTestConfig.priceData[stressTestConfig.priceData.length - 2].price - 1) * 100).toFixed(2)}%</span>
+4467:                                        <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], holders: Math.max(1, p.priceData[p.priceData.length - 1].holders - 1000) }] }))} className="w-5 h-5 flex items-center justify-center bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 hover:border-red-500 font-bold rounded text-xs transition-colors">-</button>
+4468:                                        <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], holders: p.priceData[p.priceData.length - 1].holders + 1000 }] }))} className="w-5 h-5 flex items-center justify-center bg-green-500/20 hover:bg-green-500 text-green-500 hover:text-white border border-green-500/50 hover:border-green-500 font-bold rounded text-xs transition-colors">+</button>
+4471:                                  <div className="text-lg font-bold text-white">{stressTestConfig.priceData[stressTestConfig.priceData.length - 1].holders.toLocaleString()}</div>
+4477:                                        <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], volume: p.priceData[p.priceData.length - 1].volume * 0.5 }] }))} className="w-5 h-5 flex items-center justify-center bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 hover:border-red-500 font-bold rounded text-xs transition-colors">-</button>
+4478:                                        <button onClick={() => setStressTestConfig(p => ({ ...p, priceData: [...p.priceData.slice(0, -1), { ...p.priceData[p.priceData.length - 1], volume: p.priceData[p.priceData.length - 1].volume * 2 }] }))} className="w-5 h-5 flex items-center justify-center bg-green-500/20 hover:bg-green-500 text-green-500 hover:text-white border border-green-500/50 hover:border-green-500 font-bold rounded text-xs transition-colors">+</button>
+4481:                                  <div className="text-lg font-bold text-white">{(stressTestConfig.priceData[stressTestConfig.priceData.length - 1].volume / 1000000).toFixed(1)}M</div>
+4503:                                  EVENT_ACTIVE: {stressTestConfig.currentEvent.name.toUpperCase()}
+4536:                                      onChange={(e) => setStressTestConfig(p => ({ ...p, stressScenario: e.target.value }))}
+4539:                                      {STRESS_SCENARIOS.map(s => <option key={s.id} value={s.id}>{s.name.toUpperCase()}</option>)}
+4561:                                       onClick={() => handleSendMessage(`Run Stress Audit: ${s.name}. Parameters: ${s.prompt}`)}
+4582:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, volatility: Number(e.target.value) }))}
+4594:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, crashChance: Number(e.target.value) }))}
+4606:                                        onChange={(e) => setStressTestConfig(p => ({ ...p, simulationSpeed: Number(e.target.value) }))}
+4631:                              onClick={() => handleSendMessage(`Execute Meta-Architectural Framework: ${item.name}. Category: ${item.desc}. Prompt: ${item.prompt}`)}
+4705:                              onClick={() => handleSendMessage(`Design Sovereign Infrastructure: ${item.name}. Category: ${item.desc}. Prompt: ${item.prompt}`)}
+4792:                              onClick={() => handleSendMessage(`Analyze Evolutionary Topology: ${item.name}. Category: ${item.desc}. Prompt: ${item.prompt}`)}
+4876:                              onClick={() => handleSendMessage(`Research Request: ${item.name}. Scope: ${item.desc}. Parameters: ${item.prompt}`)}
+4904:                              onClick={() => handleSendMessage(`Initialize Tokenomics Module: ${item.name}. Context: ${item.desc}. Details: ${item.prompt}`)}
+4932:                              onClick={() => handleSendMessage(`Compliance Check: ${item.name}. Scope: ${item.desc}. Instructions: ${item.prompt}`)}
+4960:                              onClick={() => handleSendMessage(`Design Architecture: ${item.name}. Component: ${item.desc}. Spec: ${item.prompt}`)}
+4990:                              onClick={() => handleSendMessage(`Plan GTM Strategy: ${item.name}. Category: ${item.desc}. Parameters: ${item.prompt}`)}
+5020:                              onClick={() => handleSendMessage(`Product Planning: ${item.name}. Focus: ${item.desc}. Tasks: ${item.prompt}`)}
+5048:                              onClick={() => handleSendMessage(`Agile Sync: ${item.name}. Metric: ${item.desc}. Methodology: ${item.prompt}`)}
+5076:                              onClick={() => handleSendMessage(`Value Refinement: ${item.name}. Goal: ${item.desc}. Logic: ${item.prompt}`)}
+5166:                                          onClick={() => handleSendMessage(`Develop CRM Task: ${item.name}. Scope: ${item.desc}. Prompt: ${item.prompt}`)}
+5205:                           onClick={() => handleSendMessage("Generate comprehensive project strategy.")}
+5260:                                <span className="text-[9px] font-mono ml-auto tracking-widest">{msg.timestamp.toLocaleTimeString()}</span>
+5313:                      onChange={(e) => setInputText(e.target.value)}
+5314:                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+5319:                      onClick={() => handleSendMessage()}
+5361:                                const next = priorities[(priorities.indexOf(task.priority) + 1) % 3];
+5362:                                setTasks(prev => prev.map(t => t.id === task.id ? { ...t, priority: next as any } : t));
+5375:                                  setTasks(prev => {
+5376:                                    const index = prev.findIndex(t => t.id === task.id);
+5389:                                  setTasks(prev => {
+5390:                                    const index = prev.findIndex(t => t.id === task.id);
+5497:                      onClick={() => setAuthMode('login')}
+5503:                      onClick={() => setAuthMode('register')}
+5532:                    onChange={(e) => setProfessionalId(prev => ({ ...prev, name: e.target.value }))}
+5543:                    onChange={(e) => setPassword(e.target.value)}
+5556:                        onChange={(e) => setProfessionalId(prev => ({ ...prev, role: e.target.value }))}
+5566:                        onChange={(e) => setProfessionalId(prev => ({ ...prev, company: e.target.value }))}
+5577:                      setIsSignModalOpen(false);
+5578:                      setPassword('');
